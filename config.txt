@@ -1,0 +1,77 @@
+# Cấu hình Hệ thống Phát hiện Hỏa hoạn & Khói bằng AI
+# Nguồn đầu vào (Source):
+
+# - Đối với Chế độ 1: Đường dẫn tới file video (Ví dụ: demo/fire_test3.mp4)
+# - Đối với Chế độ 2: Chỉ số webcam (Ví dụ: 0) hoặc URL luồng RTSP
+
+
+[MODEL]
+# Đường dẫn tới file weight YOLO đã huấn luyện (.pt)
+model_path = models/best_fire_detection_v1.pt
+
+# Ngưỡng độ tin cậy phát hiện (Confidence threshold) từ 0.0 đến 1.0 (Mặc định: 0.40)
+# Các đối tượng có độ tin cậy lớn hơn hoặc bằng ngưỡng này mới được nhận diện.
+conf_threshold = 0.40
+
+# Ngưỡng tin cậy riêng biệt cho từng lớp đối tượng để giảm thiểu báo động giả (False Positives)
+# Nếu muốn nhạy hơn có thể giảm xuống 0.4 - 0.45, muốn chính xác hơn có thể tăng lên 0.6 - 0.65
+conf_threshold_fire = 0.50
+conf_threshold_smoke = 0.55
+
+# Ngưỡng đè khít (Intersection over Union - IoU threshold) từ 0.0 đến 1.0 (Mặc định: 0.45)
+# Dùng để lọc bớt các khung nhận diện bị trùng lặp xung quanh cùng một đối tượng.
+iou_threshold = 0.40
+
+[INFERENCE]
+# Chế độ chạy:
+# 1 = Xử lý File Video (Chạy video đầu vào, vẽ HUD, và lưu video kết quả)
+# 2 = Chạy Real-Time (Webcam hoặc camera RTSP, hiển thị trực tiếp lên màn hình)
+mode = 1
+
+source = demo/cttv.mp4
+
+# Đường dẫn lưu video kết quả sau khi xử lý (chỉ áp dụng ở Chế độ 1)
+output_path = demo/out_f1.mp4
+
+# Lưu video sử dụng định dạng H.264 (codec avc1) để có thể xem trực tiếp trong VS Code / Trình duyệt.
+# Nếu là True sẽ dùng H.264. Nếu lỗi hoặc không hỗ trợ, tự động chuyển về codec mp4v thông thường.
+save_h264 = False
+
+
+
+[VISUALIZATION]
+# Hiển thị cửa sổ xem trực tiếp.
+# Ở Chế độ 2 thì mặc định là True. Ở Chế độ 1, bạn có thể đặt True để theo dõi trực tiếp quá trình xử lý.
+show_display = True
+
+# Tự động phát hiện môi trường SSH / Headless (Không có màn hình GUI).
+# Nếu là True, code sẽ tự động phát hiện nếu chạy qua SSH hoặc server không màn hình
+# để tắt cửa sổ hiển thị (chuyển show_display thành False), tránh bị crash lỗi.
+auto_headless_detect = True
+
+# Độ dày của viền hộp nhận diện (bounding box) (Mặc định: 3, tăng độ dày để hiển thị rõ ràng hơn)
+box_thickness = 3
+
+# Kích thước chữ của nhãn hiển thị đối tượng (Mặc định: 0.5)
+text_scale = 0.5
+
+# Độ dài của các viền góc trang trí xung quanh hộp nhận diện tính bằng pixel (Mặc định: 15)
+corner_length = 15
+
+[LOGS]
+# Bật/tắt lưu tệp nhật ký (log file) vào thư mục logs (True = Bật, False = Tắt)
+save_log = False
+
+[ALERTS]
+# Bật/tắt toàn bộ cơ chế cảnh báo hỏa hoạn (True = Bật, False = Tắt)
+# Nếu tắt, hệ thống sẽ bỏ qua kiểm tra ngưỡng cảnh báo và không lưu ảnh chụp sự cố
+enable_alerts = True
+
+# Số khung hình (frames) liên tiếp phát hiện có lửa/khói để kích hoạt trạng thái CẢNH BÁO (ALERT)
+alert_frames_threshold = 5
+
+# Lưu ảnh chụp màn hình (screenshot) khi có lửa/khói vào thư mục 'alerts' (Chỉ hoạt động khi enable_alerts = True)
+save_alert_images = True 
+
+# Thời gian chờ giữa các lần lưu ảnh cảnh báo (tính theo số khung hình) để tránh tràn ngập thư mục alerts
+alert_save_cooldown_frames = 30

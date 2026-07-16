@@ -1,0 +1,40 @@
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      50/50        10G      1.181     0.8978        1.5          6        640: 100% ━━━━━━━━━━━━ 287/287 4.1it/s 1:09
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 14/14 3.6it/s 3.8s
+                   all        872       1516       0.83      0.694       0.77      0.482
+
+50 epochs completed in 1.049 hours.
+Optimizer stripped from /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/runs/train/yolo11s/weights/last.pt, 19.2MB
+Optimizer stripped from /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/runs/train/yolo11s/weights/best.pt, 19.2MB
+
+Validating /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/runs/train/yolo11s/weights/best.pt...
+Ultralytics 8.4.84 🚀 Python-3.9.25 torch-2.5.1+cu121 CUDA:0 (NVIDIA A30, 24164MiB)
+YOLO11s summary (fused): 101 layers, 9,413,574 parameters, 0 gradients, 21.3 GFLOPs
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 14/14 2.6it/s 5.4s
+                   all        872       1516      0.817      0.711      0.774      0.482
+                  Fire        745       1116      0.832      0.794      0.843      0.507
+                 Smoke        274        400      0.802      0.629      0.706      0.457
+Speed: 0.2ms preprocess, 1.6ms inference, 0.0ms loss, 1.8ms postprocess per image
+Results saved to /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/runs/train/yolo11s
+
+======================================================================
+CẤU HÌNH HUẤN LUYỆN V1 (V1 Training Parameters):
+- epochs: 50
+- patience: 10
+- imgsz: 640
+- batch: 32
+- workers: 4
+- optimizer: AdamW
+- lr0: 0.01
+- lrf: 0.01
+- freeze: None (Huấn luyện toàn bộ mạng)
+- cls: 0.5 (Mặc định)
+- mosaic: 1.0
+- mixup: 0.15
+- scale: 0.5
+- translate: 0.1
+- fliplr: 0.5
+- hsv_h: 0.015
+- hsv_s: 0.7
+- hsv_v: 0.4
+======================================================================

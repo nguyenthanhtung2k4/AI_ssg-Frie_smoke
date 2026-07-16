@@ -309,6 +309,7 @@ alert_save_cooldown_frames = 30
         # Khởi tạo bộ ghi Video đối với chế độ xử lý xuất file (Mode 1)
         if self.mode == 1:
             os.makedirs(os.path.dirname(os.path.abspath(self.output_path)), exist_ok=True)
+            self.h264_fallback = False
             if self.save_h264:
                 try:
                     self.logger.info("Đang thử sử dụng codec H.264 (avc1) để ghi video kết quả...")
@@ -319,14 +320,18 @@ alert_save_cooldown_frames = 30
                     else:
                         self.logger.warning("Codec H.264 (avc1) không khả dụng. Tự động chuyển về codec mp4v...")
                         self.writer = None
+                        self.h264_fallback = True
                 except Exception as e:
                     self.logger.warning(f"Lỗi khởi tạo codec H.264: {e}. Đang chuyển về mp4v mặc định...")
                     self.writer = None
+                    self.h264_fallback = True
             
             if self.writer is None:
                 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
                 self.writer = cv2.VideoWriter(self.output_path, fourcc, fps, (width, height))
                 self.logger.info(f"Khởi tạo ghi video codec mp4v thành công. File đích: {self.output_path}")
+                if self.save_h264:
+                    self.h264_fallback = True
                 
         # Khởi tạo cửa sổ xem hiển thị GUI
         if self.show_display:
@@ -579,6 +584,35 @@ alert_save_cooldown_frames = 30
             self.cap.release()
         if self.writer is not None:
             self.writer.release()
+            
+            # Tự động convert video sang chuẩn H.264 bằng ffmpeg nếu OpenCV phải fallback sang mp4v
+            if getattr(self, 'h264_fallback', False) and os.path.exists(self.output_path):
+                h264_path = self.output_path.replace(".mp4", "_h264.mp4")
+                self.logger.info("Đang convert video sang H.264 bằng ffmpeg...")
+                import subprocess
+                try:
+                    result = subprocess.run(
+                        [
+                            "ffmpeg", "-y",
+                            "-i", self.output_path,
+                            "-vcodec", "libx264",
+                            "-crf", "23",
+                            "-preset", "fast",
+                            h264_path
+                        ],
+                        capture_output=True,
+                        text=True
+                    )
+                    if result.returncode == 0:
+                        self.logger.info(f"Đã convert H.264 thành công: {h264_path}")
+                        self.h264_output_path = h264_path
+                    else:
+                        self.logger.warning("Convert H.264 bằng ffmpeg thất bại.")
+                        if result.stderr:
+                            self.logger.warning(f"Lỗi ffmpeg: {result.stderr[-300:].strip()}")
+                except Exception as e:
+                    self.logger.warning(f"Không thể chạy ffmpeg: {e}")
+                    
         if self.show_display:
             try:
                 cv2.destroyAllWindows()
@@ -607,6 +641,8 @@ alert_save_cooldown_frames = 30
             
         if self.mode == 1 and self.writer is not None:
             summary_str += f"Video kết quả xuất ra lưu tại  : {os.path.abspath(self.output_path)}\n"
+            if getattr(self, 'h264_output_path', None) and os.path.exists(self.h264_output_path):
+                summary_str += f"Video H.264 (xem trên VS Code) : {os.path.abspath(self.h264_output_path)}\n"
         summary_str += "=" * 55 + "\n"
         
         # Ghi tóm tắt vào log file và in ra console

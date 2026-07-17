@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+README.md
+
+# Virtual environments
+env/
+venv/
+.env/
+
+# Python caching
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Local outputs & logs
+logs/
+alerts/
+
+# Datasets and demo videos (usually mounted or downloaded)
+dataset/
+demo/output_fire_detection.mp4
+
+# OS generated files
+.DS_Store
+Thumbs.db

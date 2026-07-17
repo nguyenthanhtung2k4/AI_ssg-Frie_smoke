@@ -1,0 +1,9 @@
+# AI Fire & Smoke Detection Requirements
+# Core dependencies matching the local virtual environment (D:\CODE\THUCTAP\AI_SaoMai\env)
+
+numpy==2.0.2
+opencv-python==4.10.0.84
+torch==2.5.1
+torchvision==0.20.1
+ultralytics==8.4.83
+roboflow==1.2.16

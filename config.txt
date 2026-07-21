@@ -7,7 +7,8 @@
 
 [MODEL]
 # Đường dẫn tới file weight YOLO đã huấn luyện (.pt)
-model_path = models/best_fire_detection_v1.pt
+#model_path = models/best_fire_detection_v1.pt
+model_path = runs/detect/yolo11s_V1/weights/best.pt
 
 # Ngưỡng độ tin cậy phát hiện (Confidence threshold) từ 0.0 đến 1.0 (Mặc định: 0.40)
 # Các đối tượng có độ tin cậy lớn hơn hoặc bằng ngưỡng này mới được nhận diện.
@@ -28,21 +29,21 @@ iou_threshold = 0.40
 # 2 = Chạy Real-Time (Webcam hoặc camera RTSP, hiển thị trực tiếp lên màn hình)
 mode = 1
 
-source = demo/cttv.mp4
+source = demo/f1.mp4
 
 # Đường dẫn lưu video kết quả sau khi xử lý (chỉ áp dụng ở Chế độ 1)
-output_path = demo/out_f1.mp4
+output_path = demo/out_firehome.mp4
 
 # Lưu video sử dụng định dạng H.264 (codec avc1) để có thể xem trực tiếp trong VS Code / Trình duyệt.
 # Nếu là True sẽ dùng H.264. Nếu lỗi hoặc không hỗ trợ, tự động chuyển về codec mp4v thông thường.
-save_h264 = False
+save_h264 = True
 
 
 
 [VISUALIZATION]
 # Hiển thị cửa sổ xem trực tiếp.
 # Ở Chế độ 2 thì mặc định là True. Ở Chế độ 1, bạn có thể đặt True để theo dõi trực tiếp quá trình xử lý.
-show_display = True
+show_display = False
 
 # Tự động phát hiện môi trường SSH / Headless (Không có màn hình GUI).
 # Nếu là True, code sẽ tự động phát hiện nếu chạy qua SSH hoặc server không màn hình

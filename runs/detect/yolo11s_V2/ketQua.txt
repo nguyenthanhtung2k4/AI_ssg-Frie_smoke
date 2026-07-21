@@ -1,0 +1,41 @@
+======================================================================
+CẤU HÌNH HUẤN LUYỆN V2 (V2 Training Parameters):
+- epochs: 70
+- patience: 15
+- imgsz: 640
+- batch: 128 (Tận dụng 24GB VRAM GPU A30)
+- workers: 8 (Tối ưu hóa đa luồng CPU)
+- optimizer: AdamW
+- lr0: 0.002 (Fine-tune mịn để giữ đặc trưng gốc)
+- lrf: 0.01
+- freeze: 10 (Đóng băng 10 layers backbone đầu)
+- cls: 1.5 (Tăng cường trọng số để tối ưu phân loại khói)
+- cache: True (Nạp dữ liệu vào RAM để tránh nghẽn I/O ổ đĩa)
+- amp: True (Kích hoạt FP16 tính toán trên Tensor Cores)
+- mosaic: 0.8 (Giảm nhẹ xuống 0.8 để bảo toàn cấu trúc khói tự nhiên)
+- mixup: 0.15
+- scale: 0.5
+- translate: 0.1
+- fliplr: 0.5
+- hsv_h: 0.015
+- hsv_s: 0.7
+- hsv_v: 0.4
+======================================================================
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      70/70      15.1G      1.159      2.333      1.417        111        640: 100% ━━━━━━━━━━━━ 72/72 1.8it/s 40.8s
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 4/4 1.3s/it 5.4s
+                   all        872       1516      0.825       0.72      0.756      0.455
+
+70 epochs completed in 0.952 hours.
+Optimizer stripped from /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/yolo11s_V2/weights/last.pt, 19.2MB
+Optimizer stripped from /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/yolo11s_V2/weights/best.pt, 19.2MB
+
+Validating /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/yolo11s_V2/weights/best.pt...
+Ultralytics 8.4.84 🚀 Python-3.9.25 torch-2.5.1+cu121 CUDA:0 (NVIDIA A30, 24164MiB)
+YOLO11s summary (fused): 101 layers, 9,413,574 parameters, 0 gradients, 21.3 GFLOPs
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 4/4 1.5s/it 5.9s
+                   all        872       1516      0.801      0.734      0.758      0.459
+                  Fire        745       1116      0.831        0.8      0.832      0.501
+                 Smoke        274        400      0.772      0.668      0.684      0.417
+Speed: 0.2ms preprocess, 1.7ms inference, 0.0ms loss, 1.9ms postprocess per image
+Results saved to /hdd2/tungtt/AI_ssg-Frie_smoke/runs/detect/yolo11s_V2
